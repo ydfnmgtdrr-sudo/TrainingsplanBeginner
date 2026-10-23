@@ -1,0 +1,1020 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0d11">
+<title>Kraft-Grundlage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0c0d11; --bg2:#101218; --surface:#16181f; --surface2:#1c1f28;
+  --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
+  --text:#f3f4f7; --muted:#9aa1ad; --faint:#6b7280;
+  --accent:#c8f03c; --accent-soft:rgba(200,240,60,.13); --on-accent:#12150a;
+  --good:#34d399; --bad:#f87171;
+  --b1:#2dd4bf; --b2:#818cf8; --b3:#fb7185;
+  --f-disp:'Anton',Impact,'Arial Narrow',sans-serif;
+  --f-cond:'Barlow Condensed',system-ui,sans-serif;
+  --f-body:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --shadow:0 12px 34px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:var(--f-body);color:var(--text);background:var(--bg);
+  background-image:
+    radial-gradient(1100px 520px at 88% -8%,rgba(200,240,60,.10),transparent 60%),
+    radial-gradient(900px 480px at -10% 8%,rgba(129,140,248,.10),transparent 55%);
+  background-attachment:fixed;-webkit-font-smoothing:antialiased;line-height:1.5;letter-spacing:.005em;
+}
+#app{position:relative;z-index:1;max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;
+  border-left:1px solid var(--line);border-right:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,255,255,.012),transparent 240px)}
+
+/* app bar */
+.appbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:11px;padding:14px 18px 13px;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  background:linear-gradient(180deg,rgba(12,13,17,.94),rgba(12,13,17,.7));border-bottom:1px solid var(--line)}
+.logo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-size:19px;
+  background:radial-gradient(circle at 30% 25%,#ecff9a,var(--accent));
+  box-shadow:0 6px 16px rgba(200,240,60,.32),inset 0 1px 0 rgba(255,255,255,.4)}
+.brand h1{font-family:var(--f-disp);font-size:21px;letter-spacing:.045em;line-height:.95;margin:0;text-transform:uppercase;font-weight:400}
+.brand p{margin:1px 0 0;font-size:10.5px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;font-weight:700}
+.appbar .wk{margin-left:auto;text-align:right}
+.appbar .wk b{font-family:var(--f-disp);font-weight:400;font-size:18px;letter-spacing:.03em;display:block;line-height:1}
+.appbar .wk span{font-size:9.5px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;font-weight:700}
+
+main{flex:1;padding:18px 16px 110px;animation:fade .3s ease both}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{transform:scale(.7)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+
+/* bottom nav */
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;z-index:40;width:100%;max-width:480px;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:linear-gradient(180deg,rgba(16,18,24,.85),rgba(10,11,15,.97));
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--line2);
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom))}
+.tab{display:flex;flex-direction:column;align-items:center;gap:3px;border:0;background:none;cursor:pointer;color:var(--faint);
+  font-family:var(--f-body);font-size:9.5px;font-weight:700;letter-spacing:.05em;padding:5px 2px;border-radius:12px;
+  transition:color .18s,transform .12s;text-transform:uppercase}
+.tab svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.tab.active{color:var(--accent)}
+.tab.active svg{filter:drop-shadow(0 0 7px rgba(200,240,60,.55))}
+.tab:active{transform:scale(.9)}
+
+/* generic */
+.eyebrow{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:20px 2px 9px}
+.eyebrow:first-child{margin-top:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}
+.pad{padding:16px 17px}
+.mb{margin-bottom:12px}
+.muted{color:var(--muted)}
+.small{font-size:12.5px;line-height:1.55}
+.stagger>*{animation:fade .38s ease both}
+.stagger>*:nth-child(2){animation-delay:.05s}.stagger>*:nth-child(3){animation-delay:.1s}
+.stagger>*:nth-child(4){animation-delay:.15s}.stagger>*:nth-child(5){animation-delay:.2s}
+.stagger>*:nth-child(6){animation-delay:.25s}.stagger>*:nth-child(n+7){animation-delay:.3s}
+input[type=date],input[type=number],input[type=text],select{
+  font-family:var(--f-body);background:var(--surface2);border:1px solid var(--line2);color:var(--text);
+  border-radius:10px;padding:9px 11px;font-size:14px;outline:none;transition:border .15s,box-shadow .15s;width:100%;min-width:0}
+select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 16px) 55%,calc(100% - 11px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:28px}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+input::placeholder{color:var(--faint)}
+input[type=date]{color-scheme:dark}
+.btn{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.07em;font-weight:700;font-size:15px;border:0;border-radius:12px;
+  padding:12px 16px;cursor:pointer;transition:transform .12s,filter .15s;background:linear-gradient(135deg,#e4ff7a,var(--accent));
+  color:var(--on-accent);width:100%;box-shadow:0 8px 20px rgba(200,240,60,.22)}
+.btn:active{transform:scale(.97)}
+.btn.ghost{background:var(--surface2);color:var(--text);border:1px solid var(--line2);box-shadow:none}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.btnrow .btn{flex:1;min-width:140px}
+.link{background:none;border:0;color:var(--faint);text-decoration:underline;cursor:pointer;font-size:11.5px;font-family:var(--f-body);padding:4px}
+
+/* hero */
+.hero{position:relative;border-radius:22px;padding:22px 20px 20px;margin-bottom:16px;overflow:hidden;
+  background:radial-gradient(420px 200px at 92% -10%,rgba(200,240,60,.22),transparent 60%),linear-gradient(160deg,#1a1d27,#121319);
+  border:1px solid var(--line2);box-shadow:var(--shadow)}
+.hero .bolt{position:absolute;right:-18px;top:-30px;font-size:130px;opacity:.06;transform:rotate(12deg)}
+.hero h2{font-family:var(--f-disp);font-weight:400;font-size:32px;line-height:.92;letter-spacing:.02em;margin:0;text-transform:uppercase}
+.hero .sub{color:var(--accent);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-top:8px}
+.hero .meta{display:flex;gap:20px;margin-top:16px}
+.hero .meta .v{font-family:var(--f-disp);font-size:26px;line-height:1;letter-spacing:.02em}
+.hero .meta .k{font-size:9.5px;color:var(--muted);letter-spacing:.13em;text-transform:uppercase;font-weight:700;margin-top:3px}
+.timeline{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:18px}
+.timeline .seg{height:8px;border-radius:5px;opacity:.38;transition:.2s}
+.timeline .seg.past{opacity:.75}
+.timeline .seg.on{opacity:1;height:11px;box-shadow:0 0 12px -1px currentColor}
+.tl-labels{display:grid;grid-template-columns:repeat(3,1fr);margin-top:6px;font-size:9px;color:var(--faint);font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.tl-labels span:nth-child(2){text-align:center}.tl-labels span:nth-child(3){text-align:right}
+
+.today{padding:17px;margin-bottom:14px}
+.tag{display:inline-flex;align-items:center;gap:7px;font-family:var(--f-disp);font-weight:400;font-size:13px;letter-spacing:.05em;
+  padding:5px 11px;border-radius:9px;color:#0c0d11;margin-bottom:11px}
+.today h3{margin:0;font-size:18px;font-weight:800}
+.today .ph{color:var(--muted);font-size:12.5px;margin-top:4px;margin-bottom:13px}
+.warn{padding:14px 15px;border-radius:14px;border:1px solid rgba(200,240,60,.3);background:var(--accent-soft);
+  color:#e7f7b2;font-size:12.5px;line-height:1.5;margin-bottom:14px;display:flex;gap:10px;align-items:flex-start}
+.warn button{margin-left:auto;flex:none;background:var(--accent);color:var(--on-accent);border:0;border-radius:9px;padding:7px 11px;
+  font-family:var(--f-cond);font-weight:700;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.stat{padding:14px 13px}
+.stat .v{font-family:var(--f-disp);font-size:24px;line-height:.95;letter-spacing:.02em;white-space:nowrap}
+.stat .v small{font-family:var(--f-body);font-size:11.5px;color:var(--muted);font-weight:700;letter-spacing:0}
+.stat .k{font-size:9.5px;color:var(--muted);letter-spacing:.11em;text-transform:uppercase;font-weight:700;margin-top:6px}
+
+.week-list{padding:6px}
+.wl{display:flex;align-items:center;gap:12px;width:100%;padding:10px 11px;border-radius:12px;border:0;background:none;color:var(--text);
+  text-align:left;cursor:pointer;font-family:var(--f-body)}
+.wl:hover{background:rgba(255,255,255,.03)}
+.wl.rest{cursor:default;opacity:.5}
+.wl.now{background:var(--accent-soft)}
+.wl .d{font-family:var(--f-disp);font-size:16px;letter-spacing:.03em;width:30px;flex:none}
+.wl .t{font-weight:800;font-size:13.5px}
+.wl .s{font-size:11.5px;color:var(--muted)}
+.wl .dot{width:8px;height:8px;border-radius:50%;flex:none;margin-left:auto}
+.opt{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line2);border-radius:6px;padding:1px 6px;margin-left:6px;vertical-align:1px}
+
+/* training selectors */
+.selgrid{display:grid;gap:6px;margin-bottom:10px}
+.selgrid.c3{grid-template-columns:repeat(3,1fr)}
+.selgrid.c4{grid-template-columns:repeat(4,1fr)}
+.selgrid.c5{grid-template-columns:repeat(5,1fr)}
+.selgrid button{border:1px solid var(--line);background:var(--surface);cursor:pointer;border-radius:12px;padding:9px 4px 8px;
+  color:var(--muted);font-weight:800;font-size:13px;letter-spacing:.03em;transition:.16s;font-family:var(--f-body);position:relative}
+.selgrid button small{display:block;font-size:8.5px;letter-spacing:.08em;font-weight:700;margin-top:2px;color:var(--faint);text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.selgrid button.on{color:#0c0d11;border-color:transparent}
+.selgrid button.on small{color:rgba(0,0,0,.62)}
+.selgrid button .nowdot{position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.selgrid button.on .nowdot{background:#0c0d11;box-shadow:none}
+
+.dhead{position:relative;border-radius:20px;padding:17px 18px 16px;margin:6px 0 14px;overflow:hidden;border:1px solid var(--line2);box-shadow:var(--shadow)}
+.dhead .code{font-family:var(--f-disp);font-size:30px;line-height:.9;letter-spacing:.02em}
+.dhead h2{margin:6px 0 0;font-size:16px;font-weight:800}
+.dhead .wk{font-size:10.5px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.dhead .note{margin-top:12px;padding:11px 13px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--line);font-size:12px;line-height:1.5}
+.chiprow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:10px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid var(--line);color:var(--muted)}
+
+.prog{display:flex;align-items:center;gap:11px;margin:4px 2px 14px}
+.prog .track{flex:1;height:8px;border-radius:6px;background:var(--surface2);overflow:hidden;border:1px solid var(--line)}
+.prog .fill{height:100%;border-radius:6px;transition:width .4s cubic-bezier(.2,.8,.2,1)}
+.prog .lbl{font-family:var(--f-disp);font-size:14px;letter-spacing:.02em;min-width:46px;text-align:right}
+.daytitle{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:15px;color:var(--muted);margin:0 2px 11px}
+.daytitle b{color:var(--text)}
+.deload{margin:0 0 13px;padding:13px 15px;border-radius:14px;border:1px solid rgba(248,113,113,.3);background:rgba(248,113,113,.07);
+  color:#fca5a5;font-size:12px;font-weight:600;line-height:1.5;display:flex;gap:9px}
+
+/* exercise card */
+.ex{padding:14px 15px 13px;margin-bottom:11px;border-left:4px solid var(--cat,#888)}
+.ex .top{display:flex;align-items:flex-start;gap:10px}
+.ex .num{font-family:var(--f-disp);font-size:14px;color:var(--faint);line-height:1.35;flex:none;width:16px}
+.ex h4{margin:0;font-size:15px;font-weight:800;line-height:1.3;flex:1}
+.pill{font-size:9px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding:3px 7px;border-radius:6px;flex:none;white-space:nowrap;
+  color:var(--cat,#aaa);background:color-mix(in srgb,var(--cat,#888) 16%,transparent)}
+.mainpill{display:inline-block;margin:6px 0 0 26px;font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:2px 7px;border-radius:6px;
+  background:var(--accent);color:var(--on-accent)}
+.targets{display:flex;gap:7px;flex-wrap:wrap;margin-top:11px}
+.tg{display:flex;flex-direction:column;gap:1px;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:7px 10px;min-width:54px}
+.tg .k{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.tg .v{font-family:var(--f-disp);font-size:16px;letter-spacing:.01em;line-height:1.05}
+.tg .v.sm{font-size:14px}
+.tg.kg{border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.tg.kg .v{color:var(--accent)}
+.tg .v small{font-family:var(--f-body);font-size:10px;color:var(--muted);font-weight:600}
+.tg.miss{cursor:pointer}
+.tg.miss .v{font-family:var(--f-body);font-size:11px;font-weight:800;color:var(--accent);text-decoration:underline}
+.cues{font-size:12px;color:var(--muted);line-height:1.5;margin-top:10px}
+.cues b{color:#e7f7b2;font-weight:700}
+.alt{font-size:11px;color:var(--faint);margin-top:6px}
+.alt b{color:var(--muted)}
+.last{margin-top:10px;font-size:11px;color:var(--muted);padding:7px 10px;border-radius:9px;background:rgba(255,255,255,.035);border:1px dashed var(--line2)}
+.last b{color:var(--text);font-weight:800}
+.dlhint{margin-top:8px;font-size:11px;color:#fca5a5}
+.sets{margin-top:11px;display:flex;flex-direction:column;gap:6px}
+.setrow{display:grid;grid-template-columns:38px repeat(var(--n),1fr);gap:6px;align-items:center}
+.sethead{display:grid;grid-template-columns:38px repeat(var(--n),1fr);gap:6px}
+.sethead span{font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:700;text-align:center}
+.setbox{width:38px;height:38px;border-radius:10px;border:1.5px solid var(--line2);background:var(--surface2);cursor:pointer;
+  font-family:var(--f-disp);font-size:14px;color:var(--muted);display:grid;place-items:center;transition:.14s;letter-spacing:.02em;padding:0}
+.setbox.done{background:var(--cat,var(--accent));border-color:transparent;color:#0c0d11;animation:pop .26s ease}
+.setrow input{padding:8px 4px;font-size:14.5px;font-family:var(--f-disp);letter-spacing:.02em;text-align:center;height:38px}
+
+/* rechner */
+.rm-row{padding:13px 14px;margin-bottom:9px}
+.rm-row .head{display:flex;align-items:center;gap:11px}
+.rm-row .nm{font-weight:800;font-size:14px;flex:1}
+.rm-row .inp{display:flex;align-items:center;gap:7px}
+.rm-row .inp input{width:84px;text-align:center;font-family:var(--f-disp);font-size:17px;letter-spacing:.02em;padding:7px}
+.rm-row .inp span{font-size:11px;color:var(--muted);font-weight:700}
+.rm-row .fromlog{font-size:11px;color:var(--muted);margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rm-row .fromlog button{background:none;border:1px solid var(--line2);color:var(--accent);border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--f-body)}
+.pcts{display:flex;gap:6px;overflow-x:auto;margin-top:11px;padding-bottom:3px;-webkit-overflow-scrolling:touch}
+.pcts::-webkit-scrollbar{height:5px}.pcts::-webkit-scrollbar-thumb{background:var(--line2);border-radius:4px}
+.pc{flex:none;text-align:center;background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:6px 8px;min-width:50px}
+.pc .p{font-size:8.5px;color:var(--faint);font-weight:800;letter-spacing:.04em}
+.pc .w{font-family:var(--f-disp);font-size:15px;letter-spacing:.01em;margin-top:1px}
+.pc.hot{border-color:var(--accent);background:var(--accent-soft)}
+.pc.hot .w{color:var(--accent)}
+.est .grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:8px;margin-top:11px}
+.lbl{font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:700;margin-bottom:4px;display:block}
+.est .out{display:flex;align-items:center;gap:12px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line2)}
+.est .out .v{font-family:var(--f-disp);font-size:28px;line-height:1;color:var(--accent)}
+.est .out .v small{font-family:var(--f-body);font-size:12px;color:var(--muted);font-weight:700}
+.est .out .k{font-size:9.5px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;font-weight:700}
+.est .out .btn{width:auto;margin-left:auto;padding:10px 14px;font-size:14px}
+.tip{padding:13px 15px;border-radius:13px;background:var(--accent-soft);border:1px solid rgba(200,240,60,.25);color:#e7f7b2;font-size:12px;line-height:1.5;display:flex;gap:9px;margin-top:6px}
+
+/* werte */
+.chart-card{padding:14px 12px 12px;margin-bottom:12px}
+.chart-card canvas{width:100%;height:210px;display:block}
+.legend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;font-size:10.5px;font-weight:700;color:var(--muted)}
+.legend i{display:inline-block;width:11px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+.val-row{padding:14px 15px;margin-bottom:10px}
+.val-row .rh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
+.val-row .rh .lab{font-weight:800;font-size:13.5px}
+.val-row .rh .ms{font-size:9.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#0c0d11;padding:3px 8px;border-radius:7px}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vgrid .full{grid-column:1/-1}
+.vgrid input{text-align:center;font-family:var(--f-disp);letter-spacing:.02em;font-size:15px;padding:8px 6px}
+.vgrid input[type=text],.vgrid input[type=date]{font-family:var(--f-body);font-size:13px;text-align:left}
+.vdelta{display:flex;gap:16px;margin-top:11px;padding-top:11px;border-top:1px dashed var(--line2)}
+.vdelta .d{font-size:9px;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.vdelta .d b{display:block;font-family:var(--f-disp);font-weight:400;font-size:16px;letter-spacing:.02em;margin-top:2px;color:var(--text)}
+.vdelta .d b.up{color:var(--good)}.vdelta .d b.dn{color:var(--bad)}
+
+/* wissen */
+.gp{padding:15px 16px;margin-bottom:10px;border-left:4px solid var(--accent)}
+.gp h4{margin:0 0 6px;font-size:14.5px;font-weight:800}
+.gp p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
+.gp .n{font-family:var(--f-disp);font-weight:400;font-size:13px;color:var(--accent);margin-right:7px}
+.list{margin:0;padding:0;list-style:none}
+.list li{font-size:12.5px;line-height:1.55;color:var(--text);padding:7px 0 7px 22px;position:relative;border-bottom:1px solid var(--line)}
+.list li:last-child{border-bottom:0}
+.list li::before{content:"";position:absolute;left:4px;top:14px;width:7px;height:7px;border-radius:2px;background:var(--accent)}
+.list li .muted{display:block;font-size:11.5px}
+.olist{margin:0;padding:0;list-style:none;counter-reset:o}
+.olist li{counter-increment:o;font-size:12.5px;line-height:1.55;padding:7px 0 7px 30px;position:relative;border-bottom:1px solid var(--line)}
+.olist li:last-child{border-bottom:0}
+.olist li::before{content:counter(o);position:absolute;left:0;top:7px;width:20px;height:20px;border-radius:6px;background:var(--surface2);border:1px solid var(--line2);
+  font-family:var(--f-disp);font-size:11px;display:grid;place-items:center;color:var(--accent)}
+.warnbox{padding:15px 16px;margin:4px 0 10px;border:1px solid rgba(248,113,113,.28);background:rgba(248,113,113,.05)}
+.warnbox h3{font-family:var(--f-disp);font-weight:400;font-size:16px;letter-spacing:.04em;color:#fca5a5;margin:0 0 8px;text-transform:uppercase}
+.tbl{width:100%;border-collapse:collapse;font-size:12px}
+.tbl th{text-align:left;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);font-weight:800;padding:0 6px 8px}
+.tbl td{padding:9px 6px;border-top:1px solid var(--line);vertical-align:top}
+.tbl td:first-child{font-weight:800;white-space:nowrap}
+.foot{text-align:center;color:var(--faint);font-size:10.5px;letter-spacing:.05em;padding:18px 10px 4px;line-height:1.6}
+.appbar .wk span,.appbar .wk b{white-space:nowrap}
+@media (max-width:360px){
+  .brand h1{font-size:17px}
+  .brand p{font-size:9.5px;letter-spacing:.12em}
+  .hero h2{font-size:27px}
+  .selgrid button small{font-size:7.5px}
+  .stat .v{font-size:19px}
+  .stat{padding:12px 10px}
+}
+
+/* Wochentage-Umschalter */
+.schedtoggle{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:5px;margin-bottom:10px}
+.schedtoggle button{border:0;background:none;cursor:pointer;color:var(--muted);font-family:var(--f-cond);font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;font-size:14px;padding:9px 4px;border-radius:9px;transition:.16s}
+.schedtoggle button.on{background:var(--accent);color:var(--on-accent);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="appbar">
+    <div class="logo" aria-hidden="true">🏋️</div>
+    <div class="brand">
+      <h1>Kraft-Grundlage</h1>
+      <p>12 Wochen · 4 Tage</p>
+    </div>
+    <div class="wk" id="wkBadge"></div>
+  </header>
+  <main id="screen"></main>
+  <nav class="tabbar" id="tabbar" aria-label="Navigation"></nav>
+</div>
+
+<script>
+/* =====================================================================
+   PLAN-DATEN
+   4 Tage: Ober- und Unterkörper im Wechsel. Jede Übung bleibt über alle
+   12 Wochen gleich – nur Sätze, Wdh und Gewicht ändern sich pro Block.
+   p = [[Sätze, Wdh] Block 1, Block 2, Block 3]
+   lift = Hauptübung mit Zielgewicht aus dem 1RM (Rechner)
+   ===================================================================== */
+const BLOCKS=[
+  {code:'B1',name:'Grundlage',weeks:'W1–W4',color:'#2dd4bf',pct:[.625,.65,.675],deloadPct:.55,rpe:'7',
+   focus:'Technik & Muskelaufbau',main:'4×8–10 @ 62,5–67,5 %',
+   desc:'Bewegungen sauber lernen, Muskeln und Sehnen an das Training gewöhnen. Moderate Gewichte, viele saubere Wiederholungen – bei jedem Satz bleiben <b>2–3 Wdh im Tank</b>.'},
+  {code:'B2',name:'Aufbau',weeks:'W5–W8',color:'#818cf8',pct:[.70,.725,.75],deloadPct:.60,rpe:'7–8',
+   focus:'Mehr Gewicht, solides Volumen',main:'4×6–8 @ 70–75 %',
+   desc:'Die Gewichte steigen jede Woche, das Volumen bleibt hoch. In diesem Block baust du die meiste <b>Muskulatur und Grundkraft</b> auf.'},
+  {code:'B3',name:'Kraft',weeks:'W9–W12',color:'#fb7185',pct:[.775,.80,.825],deloadPct:.65,rpe:'8',
+   focus:'Schwerere Sätze, weniger Wdh',main:'4×4–6 @ 77,5–82,5 %',
+   desc:'Die Basis aus Block 1 und 2 wird in Kraft umgesetzt: schwerere Sätze mit 4–6 Wdh bei den Hauptübungen, Zusatzübungen bleiben im mittleren Bereich. <b>Technik bleibt sauber</b>.'}
+];
+const WEEKS=[{n:'W1',s:'Start'},{n:'W2',s:'Aufbau'},{n:'W3',s:'Top'},{n:'W4',s:'Deload'}];
+const LIFTS=[
+  {key:'squat',name:'Kniebeuge'},
+  {key:'bench',name:'Bankdrücken'},
+  {key:'deadlift',name:'Kreuzheben (Trap-Bar)'},
+  {key:'ohp',name:'Schulterdrücken (LH)'}
+];
+const LIFT_COLORS={squat:'#60a5fa',bench:'#f472b6',deadlift:'#c8f03c',ohp:'#fbbf24'};
+const CATS={'Kraft':'#ff8a3d','Beine':'#60a5fa','Hüfte':'#a78bfa','Oberkörper':'#f472b6','Arme':'#fbbf24','Core':'#94a3b8'};
+const FIELDS={
+  std:[{k:'kg',l:'kg'},{k:'reps',l:'Wdh'},{k:'rpe',l:'RPE'}],
+  bw:[{k:'kg',l:'+kg'},{k:'reps',l:'Wdh'},{k:'rpe',l:'RPE'}]
+};
+const MAIN=[[4,'8–10'],[4,'6–8'],[4,'4–6']];
+
+const DAYS=[
+ {id:'ukA',title:'Unterkörper A',short:'Beine A',sub:'Kniebeuge-Tag',kern:'Kniebeuge · RDL · Beinpresse',ex:[
+  {id:'squat',name:'Kniebeuge (Langhantel)',cat:'Kraft',lift:'squat',fields:'std',rest:'2–3 min',p:MAIN,
+   cues:'Fersen am Boden, Knie folgen den Zehen, Brust hoch. Mindestens bis Oberschenkel parallel. Kontrolliert runter, <b>kraftvoll hoch</b>.',
+   alt:'Goblet Squat oder Beinpresse'},
+  {id:'rdl',name:'Rumänisches Kreuzheben',cat:'Hüfte',fields:'std',rest:'2 min',p:[[3,'10–12'],[3,'8–10'],[3,'8']],
+   cues:'Knie leicht gebeugt, Hüfte nach hinten schieben bis zur Dehnung in der Oberschenkelrückseite. Rücken gerade, Stange nah am Bein.',
+   alt:'Mit Kurzhanteln'},
+  {id:'legpress',name:'Beinpresse',cat:'Beine',fields:'std',rest:'90 s',p:[[3,'10–12'],[3,'10–12'],[3,'8–10']],
+   cues:'Volle Bewegung, langsam ablassen, Knie am Ende nicht durchdrücken.'},
+  {id:'legcurl',name:'Beinbeuger (Maschine)',cat:'Hüfte',fields:'std',rest:'60–90 s',p:[[3,'10–12'],[3,'10–12'],[3,'8–10']],
+   cues:'Langsam ablassen (2–3 s). Eine starke Oberschenkelrückseite schützt Knie und Hamstrings.'},
+  {id:'calf',name:'Wadenheben stehend',cat:'Beine',fields:'std',rest:'60 s',p:[[3,'12–15'],[3,'12–15'],[3,'10–12']],
+   cues:'Unten 1 s Dehnung halten, oben voll auf die Zehenspitzen, langsam ablassen.'},
+  {id:'situp',name:'Sit-ups auf der Schrägbank',cat:'Core',fields:'std',rest:'45 s',p:[[3,'15'],[3,'12–15'],[3,'12–15']],
+   cues:'Kontrolliert hoch- und runterrollen, nicht reißen. Wenn 15 leicht gehen → Hantelscheibe vor die Brust.'}
+ ]},
+ {id:'okA',title:'Oberkörper A',short:'Oben A',sub:'Bankdrücken-Tag',kern:'Bankdrücken · Klimmzüge · T-Bar',ex:[
+  {id:'bench',name:'Bankdrücken (Langhantel)',cat:'Kraft',lift:'bench',fields:'std',rest:'2–3 min',p:MAIN,
+   cues:'Schulterblätter zusammen und nach unten, Füße fest am Boden. Stange kontrolliert zur unteren Brust, kraftvoll hochdrücken.',
+   alt:'Kurzhantel-Bankdrücken'},
+  {id:'pullup',name:'Klimmzüge',cat:'Oberkörper',fields:'bw',rest:'2 min',p:[[4,'6–8'],[4,'6–8'],[4,'5–6']],
+   cues:'Volle Streckung unten, Brust zur Stange. Alle Sätze am oberen Ende geschafft → <b>Zusatzgewicht</b>. Keine 6 sauberen möglich → Latzug.',
+   alt:'Latzug'},
+  {id:'inclinedb',name:'Schrägbankdrücken (Kurzhantel)',cat:'Oberkörper',fields:'std',rest:'90 s',p:[[3,'10–12'],[3,'8–10'],[3,'8–10']],
+   cues:'Bank auf ca. 30°, Hanteln tief absenken, kontrolliert drücken.'},
+  {id:'tbar',name:'T-Bar Rudern',cat:'Oberkörper',fields:'std',rest:'90 s',p:[[3,'10–12'],[3,'8–10'],[3,'8–10']],
+   cues:'Rücken gerade, Ellbogen nah am Körper Richtung Hüfte ziehen, oben Schulterblätter zusammen.',
+   alt:'Kabelrudern'},
+  {id:'lateral',name:'Seitheben',cat:'Oberkörper',fields:'std',rest:'60 s',p:[[3,'12–15'],[3,'12–15'],[3,'10–12']],
+   cues:'Leicht nach vorn geneigt, Ellbogen minimal gebeugt, bis Schulterhöhe heben. Ohne Schwung.'},
+  {id:'dips',name:'Dips',cat:'Arme',fields:'bw',rest:'90 s',p:[[3,'8–12'],[3,'8–12'],[3,'6–10']],
+   cues:'Leicht nach vorn lehnen, runter bis Oberarm parallel zum Boden. Nicht bis zum Versagen – mehr als 12 sauber → Zusatzgewicht.'},
+  {id:'preacher',name:'Preacher Curls (SZ-Stange)',cat:'Arme',fields:'std',rest:'60 s',p:[[3,'10–12'],[3,'10–12'],[3,'8–10']],
+   cues:'Unten fast ganz strecken, oben kurz anspannen, 2 s ablassen. Tipp: als <b>Supersatz mit Dips</b>.'}
+ ]},
+ {id:'ukB',title:'Unterkörper B',short:'Beine B',sub:'Kreuzheben-Tag',kern:'Kreuzheben · Split Squat · Hip Thrust',ex:[
+  {id:'deadlift',name:'Kreuzheben (Trap-Bar)',cat:'Kraft',lift:'deadlift',fields:'std',rest:'2–3 min',p:MAIN,
+   cues:'Mittig in der Trap-Bar stehen, Hüfte runter, Brust hoch, Rücken gerade. Den Boden wegdrücken. Lässt die Technik bei hohen Wdh nach → am <b>unteren Ende des Bereichs</b> bleiben.',
+   alt:'Klassisches Kreuzheben (Langhantel)'},
+  {id:'splitsquat',name:'Bulgarian Split Squat',cat:'Beine',fields:'std',rest:'90 s',p:[[3,'8–10 / Seite'],[3,'8–10 / Seite'],[3,'6–8 / Seite']],
+   cues:'Hinterer Fuß auf der Bank, senkrecht runter, über die vordere Ferse hochdrücken. Erst mit Körpergewicht sauber, dann Kurzhanteln. Gewicht = pro Hand.',
+   alt:'Ausfallschritte (gehend)'},
+  {id:'hipthrust',name:'Hip Thrust',cat:'Hüfte',fields:'std',rest:'90 s',p:[[3,'10–12'],[3,'8–10'],[3,'8–10']],
+   cues:'Schultern auf der Bank, Kinn zur Brust, Hüfte bis zur vollen Streckung hoch, oben 1 s Gesäß anspannen. Maschine oder Langhantel mit Polster.'},
+  {id:'legext',name:'Beinstrecker (Maschine)',cat:'Beine',fields:'std',rest:'60–90 s',p:[[3,'10–12'],[3,'10–12'],[3,'10–12']],
+   cues:'Oben 1 s halten, langsam ablassen (3 s).'},
+  {id:'calfseat',name:'Wadenheben sitzend',cat:'Beine',fields:'std',rest:'60 s',p:[[3,'15'],[3,'12–15'],[3,'12–15']],
+   cues:'Volle Bewegung, oben 1 s halten.'},
+  {id:'kneeraise',name:'Hängendes Knieheben',cat:'Core',fields:'std',rest:'60 s',p:[[3,'10–12'],[3,'10–12'],[3,'12–15']],
+   cues:'Ohne Schwung, Becken am Ende einrollen. Zu schwer → am Dip-Barren stützend.'}
+ ]},
+ {id:'okB',title:'Oberkörper B',short:'Oben B',sub:'Schulterdrücken-Tag',kern:'Schulterdrücken · Latzug · KH-Bank',ex:[
+  {id:'ohp',name:'Schulterdrücken (Langhantel, stehend)',cat:'Kraft',lift:'ohp',fields:'std',rest:'2–3 min',p:MAIN,
+   cues:'Gesäß und Bauch fest, Stange nah am Gesicht vorbei gerade nach oben, oben Kopf durch die Arme. <b>Kein Hohlkreuz.</b>',
+   alt:'Kurzhantel-Schulterdrücken'},
+  {id:'latpull',name:'Latzug',cat:'Oberkörper',fields:'std',rest:'90 s',p:[[3,'10–12'],[3,'8–10'],[3,'8–10']],
+   cues:'Brust raus, Stange zur oberen Brust ziehen, Ellbogen nach unten. Langsam zurück.'},
+  {id:'dbbench',name:'Kurzhantel-Bankdrücken',cat:'Oberkörper',fields:'std',rest:'90 s',p:[[3,'10–12'],[3,'8–10'],[3,'8–10']],
+   cues:'Flachbank, Hanteln tief absenken, Schulterblätter bleiben zusammen.',
+   alt:'Kabel-Flys'},
+  {id:'dbrow',name:'Einarmiges Kurzhantelrudern',cat:'Oberkörper',fields:'std',rest:'60–90 s',p:[[3,'10–12 / Seite'],[3,'8–10 / Seite'],[3,'8–10 / Seite']],
+   cues:'Eine Hand und ein Knie auf der Bank, Rücken flach, Hantel zur Hüfte ziehen.'},
+  {id:'facepull',name:'Face Pulls (Kabel)',cat:'Oberkörper',fields:'std',rest:'60 s',p:[[3,'12–15'],[3,'12–15'],[3,'12–15']],
+   cues:'Seil auf Augenhöhe zum Gesicht ziehen, Ellbogen hoch und nach außen. Hintere Schulter und <b>Schultergesundheit</b> – wichtig bei vielen Überkopf-Schlägen.',
+   alt:'Reverse Flys'},
+  {id:'inclinecurl',name:'Schrägbank-Curls (Kurzhantel)',cat:'Arme',fields:'std',rest:'60 s',p:[[3,'10–12'],[3,'8–10'],[3,'8–10']],
+   cues:'Arme hängen hinter dem Körper, Ellbogen bleiben ruhig.'},
+  {id:'skull',name:'Skull Crushers',cat:'Arme',fields:'std',rest:'60 s',p:[[3,'10–12'],[3,'8–10'],[3,'8–10']],
+   cues:'SZ-Stange Richtung Stirn absenken, Oberarme bleiben fast senkrecht. Tipp: als <b>Supersatz mit den Curls</b>.'}
+ ]}
+];
+const DAY_OF_EX={}; DAYS.forEach(D=>D.ex.forEach(ex=>DAY_OF_EX[ex.id]=D.id));
+
+/* Wochentage: js = Date.getDay() (So=0 … Sa=6) */
+const WD=[{js:1,s:'Mo',l:'Montag'},{js:2,s:'Di',l:'Dienstag'},{js:3,s:'Mi',l:'Mittwoch'},{js:4,s:'Do',l:'Donnerstag'},
+  {js:5,s:'Fr',l:'Freitag'},{js:6,s:'Sa',l:'Samstag'},{js:0,s:'So',l:'Sonntag'}];
+const SCHEDULES={
+  a:{label:'Mo · Di · Do · Fr',days:[1,2,4,5]},
+  b:{label:'Mo · Di · Fr · Sa',days:[1,2,5,6]}
+};
+const VAL_ROWS=[
+  {label:'Start (vor W1)',tag:'Basis',color:'#6b7280'},
+  {label:'Ende Block 1 (W4)',tag:'B1',color:'#2dd4bf'},
+  {label:'Ende Block 2 (W8)',tag:'B2',color:'#818cf8'},
+  {label:'Ende Block 3 (W12)',tag:'B3',color:'#fb7185'}
+];
+
+/* =====================================================================
+   SPEICHER (localStorage, eigener Präfix "ak_")
+   ===================================================================== */
+const KEYS={rm:'ak_rm',tr:'ak_training',vals:'ak_values',settings:'ak_settings'};
+const canStore=(()=>{try{const t='__ak_t';localStorage.setItem(t,'1');localStorage.removeItem(t);return true;}catch(e){return false;}})();
+function load(k,fb){ if(!canStore) return fb; try{const r=localStorage.getItem(k); return r==null?fb:JSON.parse(r);}catch(e){return fb;} }
+function save(k,v){ if(!canStore) return; try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
+
+let DB={
+  rm:load(KEYS.rm,{}),
+  tr:load(KEYS.tr,{done:{},log:{}}),
+  vals:load(KEYS.vals,VAL_ROWS.map(()=>({}))),
+  settings:load(KEYS.settings,{})
+};
+if(!DB.tr.done) DB.tr.done={}; if(!DB.tr.log) DB.tr.log={};
+while(DB.vals.length<VAL_ROWS.length) DB.vals.push({});
+
+/* Daten aus der 5-Tage-Version übernehmen: Einträge wandern zu dem Tag, auf dem die Übung jetzt liegt.
+   Übungen, die es nicht mehr gibt, werden verworfen. */
+function migrate(){
+  if(DB.settings.schema===2) return;
+  const mig=o=>{ const n={}; Object.entries(o||{}).forEach(([k,v])=>{
+    const p=k.split(':'); if(p.length!==5) return;
+    const day=DAY_OF_EX[p[3]]; if(!day) return;
+    p[2]=day; n[p.join(':')]=v;
+  }); return n; };
+  DB.tr.done=mig(DB.tr.done); DB.tr.log=mig(DB.tr.log);
+  DB.settings.schema=2; save(KEYS.tr,DB.tr); save(KEYS.settings,DB.settings);
+}
+migrate();
+let S={view:'home',b:0,w:0,d:0};
+
+/* =====================================================================
+   HELFER
+   ===================================================================== */
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const round25=x=>Math.round(x/2.5)*2.5;
+const fmt=x=>{ if(x==null||isNaN(x)) return '–'; const r=Math.round(x*10)/10; return (r%1? r.toFixed(1):String(r)).replace('.',','); };
+const fmtPct=p=>fmt(p*100)+' %';
+const num=v=>{ const n=parseFloat(String(v==null?'':v).replace(',','.')); return isNaN(n)?null:n; };
+const key=(b,w,d,id,s)=>`${b}:${w}:${DAYS[d].id}:${id}:${s}`;
+const lowerEnd=r=>String(r).replace(/(\d+)\s*–\s*\d+/,'$1');
+function epley(kg,reps){ kg=num(kg); reps=num(reps); if(!kg||!reps||reps<1||reps>12) return null; return reps===1?kg:kg*(1+reps/30); }
+function isoLocal(d){ const p=n=>String(n).padStart(2,'0'); return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`; }
+function mondayOf(d){ const x=new Date(d.getFullYear(),d.getMonth(),d.getDate()); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; }
+function sched(){ return SCHEDULES[DB.settings.sched]||SCHEDULES.a; }
+function dayFor(js){ const i=sched().days.indexOf(js); return i<0?null:i; }
+function wdOf(d){ return WD.find(x=>x.js===sched().days[d]); }
+
+/* Zentrale Satz-/Gewichtslogik – wird von Karte, Fortschrittsbalken und Zählern gemeinsam genutzt */
+function eff(ex,b,w){
+  const [baseSets,baseReps]=ex.p[b];
+  const deload=(w===3);
+  const sets=deload?Math.max(2,Math.round(baseSets*0.6)):baseSets;
+  const reps=deload?lowerEnd(baseReps):baseReps;
+  let pct=null,kg=null;
+  if(ex.lift){
+    pct=deload?BLOCKS[b].deloadPct:BLOCKS[b].pct[w];
+    const rm=num(DB.rm[ex.lift]);
+    if(rm) kg=round25(rm*pct);
+  }
+  return {sets,reps,pct,kg,deload};
+}
+function dayProgress(b,w,d){
+  let total=0,done=0;
+  DAYS[d].ex.forEach(ex=>{ const n=eff(ex,b,w).sets; for(let s=0;s<n;s++){ total++; if(DB.tr.done[key(b,w,d,ex.id,s)]) done++; } });
+  return {total,done,pct:total?Math.round(done/total*100):0};
+}
+function daysSinceStart(t){ const start=new Date(DB.settings.start+'T00:00:00'); return Math.round((t-start)/864e5); }
+function prog(){
+  const sd=DB.settings.start; if(!sd||isNaN(new Date(sd+'T00:00:00'))) return null;
+  const now=new Date(); const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const days=daysSinceStart(today);
+  const d=dayFor(today.getDay());
+  if(days<0) return {pre:true,days};
+  const wk=Math.floor(days/7);
+  if(wk>11) return {finished:true,wk};
+  return {wk,b:Math.floor(wk/4),w:wk%4,d};
+}
+const isLive=p=>p&&!p.pre&&!p.finished;
+/* Letzter geloggter Stand dieser Übung (früheste Woche davor mit Einträgen) */
+function lastTime(ex,b,w,d){
+  const cur=b*4+w;
+  for(let li=cur-1;li>=0;li--){
+    const bb=Math.floor(li/4),ww=li%4; const parts=[];
+    for(let s=0;s<8;s++){
+      const lg=DB.tr.log[key(bb,ww,d,ex.id,s)]; if(!lg) continue;
+      const a=lg.kg,r=lg.reps; if(!a&&!r) continue;
+      if(ex.fields==='bw') parts.push(`${a&&num(a)?'+'+a+' kg ':''}${r||'–'}×`);
+      else parts.push(`${a||'–'}×${r||'–'}`);
+    }
+    if(parts.length) return {label:`${BLOCKS[bb].code} · ${WEEKS[ww].n}`,txt:parts.join(' · ')};
+  }
+  return null;
+}
+/* Bestes geschätztes 1RM (Epley) pro Hauptübung und Programmwoche aus den Logs */
+function e1rmSeries(){
+  const out={}; LIFTS.forEach(l=>out[l.key]=Array(12).fill(null));
+  DAYS.forEach((D,d)=>D.ex.forEach(ex=>{
+    if(!ex.lift) return;
+    for(let li=0;li<12;li++){
+      const b=Math.floor(li/4),w=li%4;
+      for(let s=0;s<8;s++){
+        const lg=DB.tr.log[key(b,w,d,ex.id,s)]; if(!lg) continue;
+        const e=epley(lg.kg,lg.reps); if(e&&(out[ex.lift][li]==null||e>out[ex.lift][li])) out[ex.lift][li]=e;
+      }
+    }
+  }));
+  return out;
+}
+function bestE1rm(lift,series){ const s=(series||e1rmSeries())[lift]; let m=null; s.forEach(v=>{ if(v!=null&&(m==null||v>m)) m=v; }); return m; }
+function missingRM(){ return LIFTS.filter(l=>!num(DB.rm[l.key])); }
+
+/* =====================================================================
+   ICONS + TABS
+   ===================================================================== */
+const IC={
+  home:'<svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-9"/><path d="M9.5 20v-6h5v6"/></svg>',
+  train:'<svg viewBox="0 0 24 24"><path d="M6.5 8v8M17.5 8v8M3.5 10v4M20.5 10v4M6.5 12h11"/></svg>',
+  calc:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 12 16 8"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>',
+  vals:'<svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 3 8-8"/><path d="M16 7h4v4"/></svg>',
+  guide:'<svg viewBox="0 0 24 24"><path d="M5 4h11a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M5 17h13"/><path d="M9 8h6M9 11h6"/></svg>'
+};
+function buildTabs(){
+  const items=[['home','Start',IC.home],['training','Training',IC.train],['rechner','Rechner',IC.calc],['werte','Werte',IC.vals],['wissen','Wissen',IC.guide]];
+  document.getElementById('tabbar').innerHTML=items.map(([v,l,ic])=>
+    `<button class="tab ${S.view===v?'active':''}" data-nav="${v}" aria-label="${l}">${ic}<span>${l}</span></button>`).join('');
+}
+function updateBadge(){
+  const p=prog(); const el=document.getElementById('wkBadge');
+  if(isLive(p)) el.innerHTML=`<b>W${p.wk+1}</b><span>von 12</span>`;
+  else if(p&&p.finished) el.innerHTML=`<b>✓</b><span>Fertig</span>`;
+  else el.innerHTML=`<b>12</b><span>Wochen</span>`;
+}
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+function render(){
+  buildTabs(); updateBadge();
+  let html='';
+  if(S.view==='home') html=viewHome();
+  else if(S.view==='training') html=viewTraining();
+  else if(S.view==='rechner') html=viewRechner();
+  else if(S.view==='werte') html=viewWerte();
+  else html=viewWissen();
+  const m=document.getElementById('screen');
+  m.innerHTML=html; window.scrollTo(0,0);
+  m.style.animation='none'; void m.offsetWidth; m.style.animation='';
+  if(S.view==='werte') drawChart();
+}
+function gotoCurrent(){ const p=prog(); if(isLive(p)){ S.b=p.b; S.w=p.w; if(p.d!=null) S.d=p.d; } }
+
+/* ---------- START ---------- */
+function viewHome(){
+  const p=prog(); const live=isLive(p);
+  const segs=Array.from({length:12},(_,i)=>{
+    const col=BLOCKS[Math.floor(i/4)].color;
+    const cls=live?(i===p.wk?'on':(i<p.wk?'past':'')):(p&&p.finished?'past':'');
+    return `<div class="seg ${cls}" style="background:${col};color:${col}"></div>`;
+  }).join('');
+
+  let todayHTML='';
+  if(!p){
+    todayHTML=`<div class="card today">
+      <h3>Programm starten</h3>
+      <div class="ph">Wähle dein Startdatum – die App springt dann automatisch zur richtigen Woche und zum heutigen Training. Woche 1 beginnt immer an einem Montag.</div>
+      <label class="lbl" for="startInput">Startdatum</label>
+      <input type="date" id="startInput" data-start>
+      <div class="btnrow" style="margin-top:11px">
+        <button class="btn" data-start-now>Diese Woche starten</button>
+        <button class="btn ghost" data-nav="training">Plan ansehen</button>
+      </div>
+    </div>`;
+  } else if(p.pre){
+    todayHTML=`<div class="card today"><h3>Bald geht's los</h3>
+      <div class="ph">Woche 1 beginnt am ${esc(fmtDate(DB.settings.start))}. Trag vorher deine 1RM-Werte im Rechner ein.</div>
+      <button class="btn ghost" data-nav="training">Plan ansehen</button></div>`;
+  } else if(p.finished){
+    todayHTML=`<div class="card today"><span class="tag" style="background:var(--accent)">12 / 12 Wochen</span>
+      <h3>Programm abgeschlossen 💪</h3>
+      <div class="ph">Bestimme jetzt neue 1RM-Werte (Rechner), trag deine Tests unter „Werte" ein und starte dann den nächsten Durchgang mit höheren Gewichten.</div>
+      <div class="btnrow"><button class="btn" data-restart>Neuen Durchgang starten</button><button class="btn ghost" data-nav="werte">Werte eintragen</button></div></div>`;
+  } else {
+    const B=BLOCKS[p.b];
+    if(p.d==null){
+      const next=nextTrainingDay();
+      todayHTML=`<div class="card today"><span class="tag" style="background:${B.color}">${B.code} · ${WEEKS[p.w].n} · ${WEEKS[p.w].s}</span>
+        <h3>Ruhetag</h3>
+        <div class="ph">Erholung ist Teil des Plans. Nächstes Training: <b style="color:var(--text)">${esc(next.wd)} – ${esc(DAYS[next.d].title)}</b>.</div>
+        <button class="btn ghost" data-goto="${next.b}:${next.w}:${next.d}">${esc(DAYS[next.d].title)} ansehen</button></div>`;
+    } else {
+      const D=DAYS[p.d]; const pr=dayProgress(p.b,p.w,p.d);
+      todayHTML=`<div class="card today"><span class="tag" style="background:${B.color}">${B.code} · ${WEEKS[p.w].n} · ${WEEKS[p.w].s}</span>
+        <h3>Heute: ${esc(D.title)}</h3>
+        <div class="ph">${esc(D.sub)} · ${D.ex.length} Übungen${pr.done?` · ${pr.pct} % erledigt`:''}</div>
+        <button class="btn" data-goto="${p.b}:${p.w}:${p.d}">Training öffnen</button></div>`;
+    }
+  }
+
+  const miss=missingRM();
+  const warn=miss.length?`<div class="warn"><span>⚠️</span><span>Für ${miss.length===LIFTS.length?'die Hauptübungen':esc(miss.map(m=>m.name).join(', '))} fehlt noch dein 1RM – ohne den Wert zeigt der Plan kein Zielgewicht.</span><button data-nav="rechner">Eintragen</button></div>`:'';
+
+  let doneSets=0; Object.values(DB.tr.done).forEach(v=>{ if(v) doneSets++; });
+  const series=e1rmSeries(); const sq=bestE1rm('squat',series), bp=bestE1rm('bench',series);
+
+  const cb=live?p.b:S.b, cw=live?p.w:S.w;
+  const week=WD.map(x=>{
+    const d=dayFor(x.js);
+    if(d==null) return `<div class="wl rest"><span class="d">${x.s}</span><span><span class="t">Ruhetag</span></span></div>`;
+    const D=DAYS[d]; const isNow=live&&p.d===d;
+    const pr=dayProgress(cb,cw,d);
+    const dotCol=pr.total&&pr.done===pr.total?'var(--good)':(pr.done?'var(--accent)':'var(--surface2)');
+    return `<button class="wl ${isNow?'now':''}" data-goto="${cb}:${cw}:${d}"><span class="d">${x.s}</span>
+      <span><span class="t">${esc(D.title)}</span><br><span class="s">${esc(D.kern)}</span></span>
+      <span class="dot" style="background:${dotCol}" title="${pr.done}/${pr.total} Sätze"></span></button>`;
+  }).join('');
+  const cur=DB.settings.sched||'a';
+  const toggle=Object.entries(SCHEDULES).map(([k,s])=>`<button class="${cur===k?'on':''}" data-sched="${k}" aria-pressed="${cur===k}">${s.label}</button>`).join('');
+
+  return `
+  <div class="hero">
+    <div class="bolt" aria-hidden="true">🏋️</div>
+    <h2>Stärker.<br>Stabiler.</h2>
+    <div class="sub">Grundkraft · Muskelaufbau · Technik</div>
+    <div class="meta">
+      <div><div class="v">12</div><div class="k">Wochen</div></div>
+      <div><div class="v">4</div><div class="k">Tage / Woche</div></div>
+      <div><div class="v">4</div><div class="k">Hauptübungen</div></div>
+    </div>
+    <div class="timeline">${segs}</div>
+    <div class="tl-labels"><span>B1 Grundlage</span><span>B2 Aufbau</span><span>B3 Kraft</span></div>
+  </div>
+  ${warn}
+  ${todayHTML}
+  <div class="statgrid stagger">
+    <div class="card stat"><div class="v">${doneSets}</div><div class="k">Sätze erledigt</div></div>
+    <div class="card stat"><div class="v" style="color:var(--accent)">${sq?fmt(round25(sq)):'–'}<small> kg</small></div><div class="k">Kniebeuge e1RM</div></div>
+    <div class="card stat"><div class="v" style="color:var(--accent)">${bp?fmt(round25(bp)):'–'}<small> kg</small></div><div class="k">Bankdrücken e1RM</div></div>
+  </div>
+  <div class="eyebrow">Deine Woche</div>
+  <div class="schedtoggle" role="group" aria-label="Trainingstage">${toggle}</div>
+  <div class="card week-list stagger">${week}</div>
+  <div class="eyebrow">Daten-Backup</div>
+  <div class="card pad">
+    <div class="small muted" style="margin-bottom:11px">Alle Werte werden lokal in diesem Browser gespeichert. Exportiere ab und zu ein Backup – vor allem, bevor du die Website aktualisierst oder das Gerät wechselst.</div>
+    <div class="btnrow">
+      <button class="btn" data-export>⬇ Backup exportieren</button>
+      <button class="btn ghost" data-import>⬆ Backup importieren</button>
+    </div>
+    <input type="file" accept="application/json" id="importFile" style="display:none">
+    <div style="text-align:center;margin-top:10px">
+      ${DB.settings.start?`<button class="link" data-reset-start>Startdatum ändern</button> · `:''}<button class="link" data-wipe>Alle Trainingsdaten löschen</button>
+    </div>
+  </div>
+  <div class="foot">Grundübungen zuerst · Schwer, aber sauber · Jede 4. Woche Deload</div>`;
+}
+function fmtDate(iso){ if(!iso) return ''; const [y,m,d]=iso.split('-'); return `${d}.${m}.${y}`; }
+function nextTrainingDay(){
+  const now=new Date();
+  for(let i=1;i<=7;i++){
+    const t=new Date(now.getFullYear(),now.getMonth(),now.getDate()+i);
+    const d=dayFor(t.getDay()); if(d==null) continue;
+    const li=Math.min(11,Math.max(0,Math.floor(daysSinceStart(t)/7)));
+    return {d,b:Math.floor(li/4),w:li%4,wd:wdOf(d).s};
+  }
+  return {d:0,b:0,w:0,wd:wdOf(0).s};
+}
+
+/* ---------- TRAINING ---------- */
+function viewTraining(){
+  const {b,w,d}=S; const B=BLOCKS[b], D=DAYS[d]; const p=prog(); const live=isLive(p);
+  const bTabs=BLOCKS.map((x,i)=>`<button class="${i===b?'on':''}" data-b="${i}" style="${i===b?'background:'+x.color:''}">${x.code}<small>${x.name}</small>${live&&p.b===i?'<span class="nowdot"></span>':''}</button>`).join('');
+  const wTabs=WEEKS.map((x,i)=>`<button class="${i===w?'on':''}" data-w="${i}" style="${i===w?'background:'+B.color:''}">${x.n}<small>${x.s}</small>${live&&p.b===b&&p.w===i?'<span class="nowdot"></span>':''}</button>`).join('');
+  const dTabs=DAYS.map((x,i)=>`<button class="${i===d?'on':''}" data-d="${i}" style="${i===d?'background:'+B.color:''}">${wdOf(i).s}<small>${x.short}</small>${live&&p.b===b&&p.w===w&&p.d===i?'<span class="nowdot"></span>':''}</button>`).join('');
+  const pr=dayProgress(b,w,d);
+  const cards=D.ex.map((ex,i)=>exCard(ex,i,b,w,d)).join('');
+  const pctTxt=w===3?`Deload @ ${fmtPct(B.deloadPct)}`:`Hauptübung @ ${fmtPct(B.pct[w])}`;
+  return `
+  <div class="selgrid c3">${bTabs}</div>
+  <div class="selgrid c4">${wTabs}</div>
+  <div class="selgrid c4">${dTabs}</div>
+  <div class="dhead" style="background:radial-gradient(360px 180px at 92% -20%,${B.color}33,transparent 60%),linear-gradient(160deg,#191c25,#121319);border-color:${B.color}55">
+    <div class="code" style="color:${B.color}">${B.code} · ${esc(B.name)}</div>
+    <h2>${esc(B.focus)}</h2>
+    <div class="wk">${B.weeks} · ${WEEKS[w].n} ${WEEKS[w].s} · RPE ${B.rpe}</div>
+    <div class="note">${B.desc}</div>
+    <div class="chiprow"><span class="chip">${B.main}</span><span class="chip">${pctTxt}</span></div>
+  </div>
+  ${w===3?`<div class="deload"><span>🔄</span><span><b>Deload-Woche:</b> weniger Sätze, Hauptübung leichter, Zusatzübungen ca. 10 % leichter als letzte Woche. Nicht auslassen – hier wirst du stärker.</span></div>`:''}
+  <div class="prog"><div class="track"><div class="fill" id="pfill" style="width:${pr.pct}%;background:${B.color}"></div></div><div class="lbl" id="plbl" style="color:${B.color}">${pr.pct}%</div></div>
+  <div class="daytitle">${esc(wdOf(d).l)} · <b>${esc(D.title)}</b> — ${esc(D.sub)}</div>
+  ${cards}
+  <div class="foot" id="pfoot">${pr.done}/${pr.total} Sätze erledigt</div>`;
+}
+function exCard(ex,i,b,w,d){
+  const e=eff(ex,b,w); const cat=CATS[ex.cat]||'#888'; const F=FIELDS[ex.fields];
+  let kgTile='';
+  if(ex.lift){
+    kgTile=`<div class="tg"><div class="k">% 1RM</div><div class="v sm">${fmtPct(e.pct)}</div></div>`+
+      (e.kg!=null?`<div class="tg kg"><div class="k">Ziel</div><div class="v">${fmt(e.kg)}<small> kg</small></div></div>`
+                 :`<div class="tg miss" data-nav="rechner"><div class="k">Ziel</div><div class="v">1RM eintragen</div></div>`);
+  }
+  const last=lastTime(ex,b,w,d);
+  const lastHTML=last?`<div class="last">Letztes Mal (${last.label}): <b>${esc(last.txt)}</b></div>`:'';
+  const head=`<div class="sethead" style="--n:${F.length}"><span>Satz</span>${F.map(f=>`<span>${f.l}</span>`).join('')}</div>`;
+  let rows='';
+  for(let s=0;s<e.sets;s++){
+    const k=key(b,w,d,ex.id,s); const on=!!DB.tr.done[k]; const lg=DB.tr.log[k]||{};
+    const inputs=F.map(f=>{
+      let ph='–';
+      if(f.k==='kg'&&ex.fields==='std'&&e.kg!=null) ph=fmt(e.kg);
+      else if(f.k==='kg'&&ex.fields==='bw') ph='0';
+      else if(f.k==='reps') ph=String(e.reps).replace(/\s*\/\s*Seite/,'');
+      else if(f.k==='rpe') ph=w===3?'6':BLOCKS[b].rpe.split('–')[0];
+      return `<input type="text" inputmode="decimal" autocomplete="off" aria-label="Satz ${s+1} ${f.l}" data-log="${ex.id}:${s}:${f.k}" value="${esc(lg[f.k]||'')}" placeholder="${esc(ph)}">`;
+    }).join('');
+    rows+=`<div class="setrow" style="--n:${F.length}"><button class="setbox ${on?'done':''}" data-set="${ex.id}:${s}" aria-pressed="${on}" aria-label="Satz ${s+1} erledigt">${s+1}</button>${inputs}</div>`;
+  }
+  return `<div class="card ex" style="--cat:${cat}">
+    <div class="top"><span class="num">${i+1}</span><h4>${esc(ex.name)}</h4><span class="pill">${esc(ex.cat)}</span></div>
+    ${ex.lift?'<span class="mainpill">Hauptübung</span>':''}
+    <div class="targets">
+      <div class="tg"><div class="k">Sätze</div><div class="v">${e.sets}</div></div>
+      <div class="tg"><div class="k">Wdh</div><div class="v sm">${esc(e.reps)}</div></div>
+      ${kgTile}
+      <div class="tg"><div class="k">Pause</div><div class="v sm">${esc(ex.rest)}</div></div>
+    </div>
+    <div class="cues">${ex.cues}</div>
+    ${ex.alt?`<div class="alt"><b>Alternative:</b> ${esc(ex.alt)}</div>`:''}
+    ${e.deload&&!ex.lift?'<div class="dlhint">Deload: Gewicht ca. 10 % leichter als letzte Woche.</div>':''}
+    ${lastHTML}
+    <div class="sets">${head}${rows}</div>
+  </div>`;
+}
+function refreshProgress(){
+  const pr=dayProgress(S.b,S.w,S.d);
+  const f=document.getElementById('pfill'); if(f) f.style.width=pr.pct+'%';
+  const l=document.getElementById('plbl'); if(l) l.textContent=pr.pct+'%';
+  const ft=document.getElementById('pfoot'); if(ft) ft.textContent=`${pr.done}/${pr.total} Sätze erledigt`;
+}
+
+/* ---------- RECHNER ---------- */
+const PCTS=[.55,.6,.625,.65,.675,.7,.725,.75,.775,.8,.825,.85];
+function viewRechner(){
+  const p=prog(); const curPct=isLive(p)?(p.w===3?BLOCKS[p.b].deloadPct:BLOCKS[p.b].pct[p.w]):null;
+  const series=e1rmSeries();
+  const rows=LIFTS.map(l=>{
+    const v=num(DB.rm[l.key]); const best=bestE1rm(l.key,series);
+    const pcs=PCTS.map(pc=>`<div class="pc ${curPct!=null&&Math.abs(pc-curPct)<.001?'hot':''}"><div class="p">${fmt(pc*100)}%</div><div class="w">${v?fmt(round25(v*pc)):'–'}</div></div>`).join('');
+    return `<div class="card rm-row" data-rmrow="${l.key}">
+      <div class="head"><div class="nm">${esc(l.name)}</div>
+        <div class="inp"><input type="text" inputmode="decimal" aria-label="1RM ${esc(l.name)}" data-rm="${l.key}" value="${v?esc(fmt(v)):''}" placeholder="1RM"><span>kg</span></div></div>
+      <div class="pcts">${pcs}</div>
+      ${best?`<div class="fromlog">Bestes e1RM aus deinen Logs: <b style="color:var(--text)">${fmt(round25(best))} kg</b> <button data-rm-apply="${l.key}" data-val="${round25(best)}">übernehmen</button></div>`:''}
+    </div>`;
+  }).join('');
+  const opts=LIFTS.map(l=>`<option value="${l.key}">${esc(l.name)}</option>`).join('');
+  return `<div class="eyebrow">1RM schätzen</div>
+  <div class="card pad est mb">
+    <div class="small muted">Du musst kein echtes Maximum testen. Nimm einen sauberen, schweren Satz (3–8 Wdh) und trag ihn ein – das 1RM wird mit der Epley-Formel geschätzt.</div>
+    <div class="grid">
+      <div><label class="lbl" for="estLift">Übung</label><select id="estLift" data-est>${opts}</select></div>
+      <div><label class="lbl" for="estKg">Gewicht</label><input type="text" inputmode="decimal" id="estKg" data-est placeholder="kg"></div>
+      <div><label class="lbl" for="estReps">Wdh</label><input type="text" inputmode="numeric" id="estReps" data-est placeholder="Wdh"></div>
+    </div>
+    <div class="out"><div><div class="v" id="estOut">–<small> kg</small></div><div class="k">Geschätztes 1RM</div></div>
+      <button class="btn" data-est-apply>Übernehmen</button></div>
+  </div>
+  <div class="eyebrow">Deine 1RM-Werte</div>
+  <div class="small muted" style="margin:0 2px 10px">Alle Zielgewichte der Hauptübungen werden daraus berechnet (auf 2,5 kg gerundet).${curPct?` Markiert: diese Woche (${fmtPct(curPct)}).`:''}</div>
+  <div class="stagger">${rows}</div>
+  <div class="tip"><span>💡</span><span>Aktualisiere dein 1RM nach jedem Block (Woche 4, 8, 12). Wenn sich die Zielgewichte dauerhaft zu leicht (RPE ≤ 6) oder zu schwer (RPE 10) anfühlen, passe den Wert um 2,5–5 kg an. Lieber etwas zu niedrig starten – in Block 1 geht es um saubere Technik.</span></div>`;
+}
+function updateEst(){
+  const kg=document.getElementById('estKg'), r=document.getElementById('estReps'), out=document.getElementById('estOut');
+  if(!kg||!out) return null;
+  const e=epley(kg.value,r.value);
+  out.innerHTML=e?`${fmt(round25(e))}<small> kg</small>`:'–<small> kg</small>';
+  return e?round25(e):null;
+}
+
+/* ---------- WERTE ---------- */
+function deltaHTML(i){
+  const base=DB.vals[0]||{}, v=DB.vals[i]||{};
+  const one=(label,f,unit)=>{
+    const a=num(v[f]),z=num(base[f]);
+    if(a==null||z==null) return `<div class="d">${label}<b>–</b></div>`;
+    const dd=Math.round((a-z)*10)/10;
+    return `<div class="d">${label}<b class="${dd>0?'up':(dd<0?'dn':'')}">${dd>0?'+':''}${fmt(dd)}${unit}</b></div>`;
+  };
+  return one('Klimmzüge vs. Start','pull','')+one('Liegestütze vs. Start','push','')+one('Gewicht vs. Start','bw',' kg');
+}
+function refreshDeltas(){
+  document.querySelectorAll('.val-row .vdelta').forEach(el=>{ el.innerHTML=deltaHTML(+el.dataset.row); });
+}
+function viewWerte(){
+  const rows=VAL_ROWS.map((r,i)=>{
+    const v=DB.vals[i]||{};
+    return `<div class="card val-row">
+      <div class="rh"><div class="lab">${esc(r.label)}</div><div class="ms" style="background:${r.color}">${r.tag}</div></div>
+      <div class="vgrid">
+        <div><label class="lbl">Datum</label><input type="date" data-v="${i}:date" value="${esc(v.date||'')}"></div>
+        <div><label class="lbl">Körpergewicht kg</label><input type="text" inputmode="decimal" data-v="${i}:bw" value="${esc(v.bw||'')}" placeholder="–"></div>
+        <div><label class="lbl">Klimmzüge max</label><input type="text" inputmode="numeric" data-v="${i}:pull" value="${esc(v.pull||'')}" placeholder="–"></div>
+        <div><label class="lbl">Liegestütze max</label><input type="text" inputmode="numeric" data-v="${i}:push" value="${esc(v.push||'')}" placeholder="–"></div>
+        <div class="full"><label class="lbl">Notizen</label><input type="text" data-v="${i}:notes" value="${esc(v.notes||'')}" placeholder="z. B. Bedingungen, Gefühl…"></div>
+      </div>
+      ${i>0?`<div class="vdelta" data-row="${i}">${deltaHTML(i)}</div>`:''}
+    </div>`;
+  }).join('');
+  const legend=LIFTS.map(l=>`<span><i style="background:${LIFT_COLORS[l.key]}"></i>${esc(l.name.replace(' (LH)','').replace(' (Trap-Bar)',''))}</span>`).join('');
+  return `<div class="eyebrow">Kraftverlauf (geschätztes 1RM)</div>
+  <div class="card chart-card"><canvas id="chart" aria-label="Verlauf des geschätzten 1RM pro Woche"></canvas><div class="legend">${legend}</div></div>
+  <div class="small muted" style="margin:0 2px 4px">Wird automatisch aus deinen geloggten Sätzen der Hauptübungen berechnet (kg × Wdh, Epley). Je mehr du einträgst, desto genauer.</div>
+  <div class="eyebrow">Tests</div>
+  <div class="small muted" style="margin:0 2px 10px">Am Ende jedes Blocks (Deload-Woche) testen – immer nach dem Aufwärmen. Klimmzüge und Liegestütze: je ein Satz, nur saubere Wiederholungen zählen.</div>
+  <div class="stagger">${rows}</div>
+  <div class="foot">Fortschritt misst du über Wochen, nicht über einzelne Tage.</div>`;
+}
+function drawChart(){
+  const cv=document.getElementById('chart'); if(!cv) return;
+  const dpr=window.devicePixelRatio||1; const W=cv.clientWidth||400, H=cv.clientHeight||210;
+  cv.width=W*dpr; cv.height=H*dpr; const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
+  const series=e1rmSeries(); let vals=[];
+  LIFTS.forEach(l=>series[l.key].forEach(v=>{ if(v!=null) vals.push(v); }));
+  const padL=34,padR=10,padT=12,padB=24;
+  ctx.font='600 9.5px Manrope,system-ui,sans-serif';
+  if(!vals.length){
+    ctx.fillStyle='#6b7280';ctx.textAlign='center';ctx.font='600 12.5px Manrope,system-ui,sans-serif';
+    ctx.fillText('Logge kg und Wdh bei den Hauptübungen,',W/2,H/2-8); ctx.fillText('dann erscheint hier dein Verlauf.',W/2,H/2+10); return;
+  }
+  let mn=Math.min(...vals),mx=Math.max(...vals); mn=Math.floor((mn-5)/5)*5; mx=Math.ceil((mx+5)/5)*5; if(mn<0) mn=0;
+  const X=i=>padL+(W-padL-padR)*(i/11), Y=v=>padT+(H-padT-padB)*(1-(v-mn)/(mx-mn||1));
+  BLOCKS.forEach((B,bi)=>{ ctx.fillStyle=B.color+'0f'; const x0=bi===0?padL:(X(bi*4-1)+X(bi*4))/2, x1=bi===2?W-padR:(X(bi*4+3)+X(bi*4+4))/2; ctx.fillRect(x0,padT,x1-x0,H-padT-padB); });
+  ctx.strokeStyle='rgba(255,255,255,.07)';ctx.lineWidth=1;ctx.fillStyle='#6b7280';ctx.textAlign='right';
+  for(let g=0;g<=4;g++){ const v=mn+(mx-mn)*g/4, y=Y(v); ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(W-padR,y);ctx.stroke(); ctx.fillText(Math.round(v),padL-6,y+3); }
+  ctx.textAlign='center';
+  for(let i=0;i<12;i++){ ctx.fillText('W'+(i+1),X(i),H-8); }
+  LIFTS.forEach(l=>{
+    const col=LIFT_COLORS[l.key]; const pts=[]; series[l.key].forEach((v,i)=>{ if(v!=null) pts.push([i,v]); });
+    if(pts.length>1){ ctx.strokeStyle=col;ctx.lineWidth=2.2;ctx.lineJoin='round';ctx.beginPath(); pts.forEach((pt,j)=>{ const x=X(pt[0]),y=Y(pt[1]); j?ctx.lineTo(x,y):ctx.moveTo(x,y); }); ctx.stroke(); }
+    pts.forEach(pt=>{ ctx.fillStyle=col;ctx.beginPath();ctx.arc(X(pt[0]),Y(pt[1]),3.6,0,7);ctx.fill(); ctx.fillStyle='#0c0d11';ctx.beginPath();ctx.arc(X(pt[0]),Y(pt[1]),1.4,0,7);ctx.fill(); });
+  });
+}
+
+/* ---------- WISSEN ---------- */
+function viewWissen(){
+  const princ=[
+    ['Hauptübung zuerst','Nach dem Aufwärmen kommt immer die Hauptübung, solange du frisch bist. Danach die Zusatzübungen – von schwer nach leicht, Arme und Rumpf zum Schluss.'],
+    ['Hauptübungen nach Prozent','Kniebeuge, Bankdrücken, Kreuzheben und Schulterdrücken bekommen ihr Zielgewicht aus deinem 1RM. Von W1 bis W3 steigt es jede Woche um 2,5 Prozentpunkte. Fühlt sich ein Satz wie RPE 10 an → Gewicht 5 % runter statt Technik opfern.'],
+    ['Doppelte Progression bei Zusatzübungen','Beispiel 3×10–12: Schaffst du in allen Sätzen 12 saubere Wdh, nimmst du nächstes Mal mehr Gewicht (+2,5 kg bzw. nächste Hantel) und startest wieder bei 10. „Letztes Mal" auf jeder Karte zeigt dir, was du schlagen musst.'],
+    ['RPE = wie viel noch ging','RPE 7 = noch 3 Wdh möglich, RPE 8 = noch 2, RPE 9 = noch 1, RPE 10 = nichts mehr. Meist trainierst du bei RPE 7–8. Kein Training bis zum Muskelversagen.'],
+    ['Deload jede 4. Woche','Woche 4, 8 und 12: weniger Sätze, leichtere Gewichte. Das ist kein verschenktes Training – hier erholt sich der Körper und die Anpassung passiert.'],
+    ['Technik vor Gewicht','Eine saubere Wiederholung mit weniger Gewicht bringt mehr als eine schwere mit rundem Rücken. Gerade beim Grundlagen-Aufbau zählt jede saubere Wdh.']
+  ].map((x,i)=>`<div class="card gp"><h4><span class="n">${String(i+1).padStart(2,'0')}</span>${esc(x[0])}</h4><p>${esc(x[1])}</p></div>`).join('');
+  const struct=DAYS.map((D,d)=>`<tr><td>${wdOf(d).s}</td><td>${esc(D.title)}</td><td class="muted">${esc(D.kern)}</td></tr>`).join('');
+  const rest=WD.filter(x=>dayFor(x.js)==null).map(x=>x.s).join(', ');
+  return `<div class="eyebrow">Was ist neu gegenüber deinem alten Plan?</div>
+  <div class="card pad mb"><ul class="list">
+    <li><b>4 Tage, Ober- und Unterkörper im Wechsel</b> <span class="muted">Jede Muskelgruppe wird 2× pro Woche trainiert statt 1× – besser für Kraft und Muskelaufbau.</span></li>
+    <li>Beine <b>2× pro Woche</b> statt 1× <span class="muted">Ein Kniebeuge-Tag und ein Kreuzheben-Tag.</span></li>
+    <li><b>4 Hauptübungen</b> mit festen Prozent-Vorgaben <span class="muted">Kniebeuge, Bankdrücken, Kreuzheben, Schulterdrücken – so steigt die Kraft planbar statt nach Gefühl.</span></li>
+    <li><b>Kein Training bis zum Versagen</b> <span class="muted">Dips „till failure" fallen weg – 1–3 Wdh Reserve, dafür jede Woche etwas mehr.</span></li>
+    <li>Viele deiner bisherigen Übungen bleiben <span class="muted">Bankdrücken, Schrägbank, T-Bar, Latzug, Beinpresse, Beinbeuger, Preacher Curls, Skull Crushers, Seitheben, Sit-ups.</span></li>
+    <li><b>Jede 4. Woche Deload</b> <span class="muted">Geplante leichtere Woche, damit du langfristig fit bleibst.</span></li>
+  </ul></div>
+
+  <div class="eyebrow">Die Wochenstruktur</div>
+  <div class="card pad mb"><table class="tbl">
+    <thead><tr><th>Tag</th><th>Einheit</th><th>Kern</th></tr></thead>
+    <tbody>${struct}</tbody></table>
+    <div class="small muted" style="margin-top:10px">${esc(rest)}: Ruhetage (oder Volleyball). Beide Unterkörper-Tage liegen nach einem Ruhetag. Die Trainingstage kannst du auf der Startseite umstellen.</div>
+  </div>
+
+  <div class="eyebrow">Die 6 Regeln</div>
+  <div class="stagger">${princ}</div>
+
+  <div class="eyebrow">Aufwärmen (ca. 10 Minuten)</div>
+  <div class="card pad mb"><ol class="olist">
+    <li>5 min locker: Rad, Rudergerät oder Crosstrainer.</li>
+    <li>Mobilität: Beinpendel, Ausfallschritt mit Rotation, Hüft- und Armkreisen – je ca. 10 Wdh.</li>
+    <li>Hauptübung: Aufwärmsätze, z. B. leere Stange × 10 → 40 % × 8 → 60 % × 5 → 75 % × 2–3.</li>
+    <li>Zusatzübungen: bei der ersten Übung einer Muskelgruppe ein leichter Satz zum Eingrooven.</li>
+  </ol></div>
+
+  <div class="card pad warnbox">
+    <h3>Volleyball &amp; Belastung</h3>
+    <ul class="list">
+      <li>Spiel oder hartes Hallentraining am nächsten Tag → den Unterkörper-Tag möglichst verschieben oder die Zusatzübungen um je einen Satz kürzen.</li>
+      <li>Viel Hallentraining in einer Woche → bei den Zusatzübungen je einen Satz streichen. Die Hauptübungen bleiben.</li>
+      <li>Schmerz ist nicht gleich Müdigkeit: Gelenk- oder Sehnenschmerz → Übung pausieren oder durch die Alternative ersetzen, ggf. abklären lassen.</li>
+    </ul>
+  </div>
+
+  <div class="eyebrow">Nach 12 Wochen</div>
+  <div class="card pad mb"><ol class="olist">
+    <li>Woche 13: pro Hauptübung nach dem Aufwärmen einen schweren, sauberen 3er bis 5er (ca. RPE 9) – im Rechner eintragen → neues 1RM.</li>
+    <li>Tests (Körpergewicht, Klimmzüge, Liegestütze) unter „Werte" eintragen und mit dem Start vergleichen.</li>
+    <li>Nächster Durchgang ab Block 1 mit den neuen Werten. Wenn die Grundlage steht, kann der nächste Plan wieder mehr Athletik (Sprünge, Würfe) enthalten.</li>
+  </ol></div>
+
+  <div class="eyebrow">Regeneration</div>
+  <div class="card pad mb"><ul class="list">
+    <li><b>Schlaf 7–9 Stunden</b> <span class="muted">Der wichtigste Faktor für Kraftzuwachs und Muskelaufbau.</span></li>
+    <li><b>Protein ca. 1,6–2 g pro kg Körpergewicht</b> am Tag <span class="muted">Verteilt auf 3–5 Mahlzeiten.</span></li>
+    <li><b>Genug essen</b> <span class="muted">Wer Kraft und Muskeln aufbauen will, braucht eher einen leichten Kalorienüberschuss als ein Defizit.</span></li>
+  </ul></div>
+  <div class="foot">Kraft-Grundlage · 12-Wochen-Plan · 4 Tage</div>`;
+}
+
+/* =====================================================================
+   EVENTS
+   ===================================================================== */
+document.getElementById('tabbar').addEventListener('click',e=>{
+  const t=e.target.closest('[data-nav]'); if(!t) return;
+  S.view=t.dataset.nav; if(S.view==='training'&&!S._picked) gotoCurrent(); render();
+});
+const screen=document.getElementById('screen');
+screen.addEventListener('click',e=>{
+  const t=e.target;
+  const nav=t.closest('[data-nav]'); if(nav){ S.view=nav.dataset.nav; if(S.view==='training'&&!S._picked) gotoCurrent(); render(); return; }
+  const go=t.closest('[data-goto]'); if(go){ const [b,w,d]=go.dataset.goto.split(':').map(Number); Object.assign(S,{view:'training',b,w,d,_picked:true}); render(); return; }
+  const bb=t.closest('[data-b]'); if(bb){ S.b=+bb.dataset.b; S._picked=true; render(); return; }
+  const ww=t.closest('[data-w]'); if(ww){ S.w=+ww.dataset.w; S._picked=true; render(); return; }
+  const dd=t.closest('[data-d]'); if(dd){ S.d=+dd.dataset.d; S._picked=true; render(); return; }
+  const sc=t.closest('[data-sched]'); if(sc){ DB.settings.sched=sc.dataset.sched; save(KEYS.settings,DB.settings); S._picked=false; gotoCurrent(); render(); return; }
+  const set=t.closest('[data-set]');
+  if(set){
+    const [id,s]=set.dataset.set.split(':'); const k=key(S.b,S.w,S.d,id,+s);
+    const now=!DB.tr.done[k]; if(now) DB.tr.done[k]=true; else delete DB.tr.done[k];
+    save(KEYS.tr,DB.tr); set.classList.toggle('done',now); set.setAttribute('aria-pressed',now); refreshProgress(); return;
+  }
+  if(t.closest('[data-start-now]')){ DB.settings.start=isoLocal(mondayOf(new Date())); save(KEYS.settings,DB.settings); S._picked=false; gotoCurrent(); render(); return; }
+  if(t.closest('[data-reset-start]')){ delete DB.settings.start; save(KEYS.settings,DB.settings); render(); return; }
+  if(t.closest('[data-restart]')){ if(confirm('Neuen Durchgang starten? Deine bisherigen Satz-Logs werden gelöscht (vorher Backup exportieren!). 1RM-Werte und Tests bleiben.')){ DB.tr={done:{},log:{}}; save(KEYS.tr,DB.tr); DB.settings.start=isoLocal(mondayOf(new Date())); save(KEYS.settings,DB.settings); gotoCurrent(); render(); } return; }
+  if(t.closest('[data-wipe]')){ if(confirm('Wirklich alle abgehakten Sätze und Logs löschen? 1RM-Werte und Tests bleiben erhalten.')){ DB.tr={done:{},log:{}}; save(KEYS.tr,DB.tr); render(); } return; }
+  if(t.closest('[data-export]')){ exportBackup(); return; }
+  if(t.closest('[data-import]')){ document.getElementById('importFile').click(); return; }
+  const ap=t.closest('[data-rm-apply]'); if(ap){ DB.rm[ap.dataset.rmApply]=+ap.dataset.val; save(KEYS.rm,DB.rm); render(); return; }
+  if(t.closest('[data-est-apply]')){ const v=updateEst(); const l=document.getElementById('estLift').value; if(v){ DB.rm[l]=v; save(KEYS.rm,DB.rm); render(); } return; }
+});
+screen.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.log){
+    const [id,s,f]=t.dataset.log.split(':'); const k=key(S.b,S.w,S.d,id,+s);
+    DB.tr.log[k]=DB.tr.log[k]||{}; if(t.value==='') delete DB.tr.log[k][f]; else DB.tr.log[k][f]=t.value;
+    if(!Object.keys(DB.tr.log[k]).length) delete DB.tr.log[k];
+    save(KEYS.tr,DB.tr); return;
+  }
+  if(t.dataset.rm){
+    const v=num(t.value); if(v) DB.rm[t.dataset.rm]=v; else delete DB.rm[t.dataset.rm]; save(KEYS.rm,DB.rm);
+    const row=t.closest('[data-rmrow]'); row.querySelectorAll('.pc').forEach((pc,i)=>{ pc.querySelector('.w').textContent=v?fmt(round25(v*PCTS[i])):'–'; });
+    return;
+  }
+  if(t.dataset.est!==undefined){ updateEst(); return; }
+  if(t.dataset.v){ const [i,f]=t.dataset.v.split(':'); DB.vals[+i]=DB.vals[+i]||{}; DB.vals[+i][f]=t.value; save(KEYS.vals,DB.vals); refreshDeltas(); return; }
+});
+screen.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.dataset.start!==undefined&&t.value){ DB.settings.start=isoLocal(mondayOf(new Date(t.value+'T00:00:00'))); save(KEYS.settings,DB.settings); S._picked=false; gotoCurrent(); render(); return; }
+  if(t.id==='estLift'){ updateEst(); return; }
+  if(t.id==='importFile'&&t.files&&t.files[0]){ importBackup(t.files[0]); t.value=''; }
+});
+
+function exportBackup(){
+  const payload={app:'athletik-kraft',version:2,exported:new Date().toISOString(),rm:DB.rm,training:DB.tr,values:DB.vals,settings:DB.settings};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob); const a=document.createElement('a');
+  a.href=url; a.download=`kraft-grundlage_backup_${isoLocal(new Date())}.json`;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function importBackup(file){
+  const r=new FileReader();
+  r.onload=()=>{
+    try{
+      const p=JSON.parse(r.result);
+      if(p.app!=='athletik-kraft') throw new Error('falsche App');
+      DB.rm=p.rm||{}; DB.tr=p.training||{done:{},log:{}}; if(!DB.tr.done)DB.tr.done={}; if(!DB.tr.log)DB.tr.log={};
+      DB.vals=p.values||VAL_ROWS.map(()=>({})); while(DB.vals.length<VAL_ROWS.length) DB.vals.push({});
+      DB.settings=p.settings||{};
+      migrate();
+      save(KEYS.rm,DB.rm); save(KEYS.tr,DB.tr); save(KEYS.vals,DB.vals); save(KEYS.settings,DB.settings);
+      alert('Backup importiert.'); gotoCurrent(); render();
+    }catch(err){ alert('Import fehlgeschlagen – das ist keine Backup-Datei dieser App.'); }
+  };
+  r.readAsText(file);
+}
+window.addEventListener('resize',()=>{ if(S.view==='werte') drawChart(); });
+
+gotoCurrent();
+render();
+</script>
+</body>
+</html>
